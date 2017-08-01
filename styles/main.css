@@ -1,0 +1,66 @@
+*, *::before, *::after {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+html {
+  height: 100%; /* make sure our HTML takes up 100% of the browser window */
+  font-size: 100%;
+}
+
+body {
+  font-family: 'Open Sans';
+  color: white;
+  min-height: 100%; /* height of the body must be at least 100% of the window */
+}
+
+.navbar {
+  padding: 0.5em; /* rem is the same is em */
+  background-color: rgb(101,18,95);
+}
+
+.navbar .logo {
+  position: relative;
+  left: 2em;
+}
+
+.container {
+  margin: 0 auto;
+  max-width: 64em;
+}
+
+/* media queries */
+/* medium and small screens (640px) */
+@@media (min-width: 640px) {
+  html { font-size: 112%;}
+
+  /* grid system */
+  .column {
+    float: left;
+    padding-left: 1em;
+    padding-right: 1em;
+  }
+
+  .column.full { width: 100%;}
+  .column.two-thirds {width: 66.7%;}
+  .column.half {width: 50%;}
+  .column.third {width: 33.3%;}
+  .column.fourth {width: 25%;}
+  .column.flow-opposite {float: right;}
+}
+
+/* large screens (1024px) */
+@@media (min-width: 1024px) {
+  html { font-size: 120%;}
+}
+
+.clearfix::before,
+.clearfix::after {
+  content: " ";
+  display: table;
+}
+
+.clearfix::after {
+  clear: both;
+}
