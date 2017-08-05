@@ -15,10 +15,6 @@ body {
   min-height: 100%; /* height of the body must be at least 100% of the window */
 }
 
-body.landing {
-  background-color: rgb(58, 23, 63);
-}
-
 .navbar {
   padding: 0.5rem;
   background-color: rgb(101, 18, 95);
@@ -52,18 +48,6 @@ body.landing {
   text-transform: uppercase;
   letter-spacing: 0.5rem;
   text-shadow: 1px 1px 0px rgb(58, 23, 63);
-}
-.selling-points {
-  position: relative;
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-}
-
-.point {
-  position: relative;
-  padding: 2rem;
-  text-align: center;
 }
 
 .point .point-title {
@@ -100,8 +84,6 @@ body.landing {
 @media (min-width: 1024px) {
     html {font-size: 120%;}
 }
-
-
 
 .clearfix::before,
 .clearfix::after {
