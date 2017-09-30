@@ -34,6 +34,20 @@ body.landing {
   position: relative;
   padding: 2rem;
   text-align: center;
+  opacity: 0;
+  -webkit-transform: scaleX(0.9) translateY(3rem);
+  -moz-transform: scaleX(0.9) translateY(3rem);
+  /* -webkit and -moz ensure that animations are compatiable across browsers */
+  transform: scaleX(0.9) translateY(3rem);
+  /* scale the element to 90% of its width */
+  /* move the element 3em down from its normal position */
+  -webkit-transition: all 0.25s ease-in-out;
+  -moz-transition: all 0.25s ease-in-out;
+  transition: all 0.25s ease-in-out;
+  /* transition can have 4 unique values */
+  -webkit-transition-delay: 0.2s;
+  -moz-transition-delay: 0.2s;
+  transition-delay: 0.2s;
 }
 
 .point .point-title {
