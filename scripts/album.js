@@ -1,3 +1,4 @@
+//Store information such as album title, artist, label, songs, etc.
 // Example Album
 var albumPicasso = {
     title: 'The Colors',
@@ -30,23 +31,25 @@ var albumMarconi = {
     ]
 };
 
-// generate the song row content
+
+//Generate the song row content
 var createSongRow = function(songNumber, songName, songLength) {
-     var template =
-        '<tr class="album-view-song-item">'
-      + '  <td class="song-item-number">' + songNumber + '</td>'
-      + '  <td class="song-item-title">' + songName + '</td>'
-      + '  <td class="song-item-duration">' + songLength + '</td>'
-      + '</tr>'
-      ;
+    var template =
+       '<tr class="album-view-song-item">'
+     + '  <td class="song-item-number">' + songNumber + '</td>'
+     + '  <td class="song-item-title">' + songName + '</td>'
+     + '  <td class="song-item-duration">' + songLength + '</td>'
+     + '</tr>'
+     ;
 
-     return template;
- };
+    return template;
+};
 
 
- //Set the current album
- var setCurrentAlbum = function(album) {
-     // #1
+//Set the current album
+//Call this function when the window loads.
+var setCurrentAlbum = function(album) {
+     // #1 select all of the HTML elements required to display on the album page: title, artist, release info, image, and song list. We want to populate these elements with information. To do so, we assign the corresponding values of the album objects' properties to the HTML elements.
      var albumTitle = document.getElementsByClassName('album-view-title')[0];
      var albumArtist = document.getElementsByClassName('album-view-artist')[0];
      var albumReleaseInfo = document.getElementsByClassName('album-view-release-info')[0];
