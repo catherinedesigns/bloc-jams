@@ -81,7 +81,6 @@ var findParentByClassName = function(element, targetClass){
 };
 
 
-
 //Checkpoint26 - getSongItem() method
 var getSongItem = function(element){
   switch (element.className) {
