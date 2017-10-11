@@ -62,7 +62,7 @@ var createSongRow = function(songNumber, songName, songLength) {
      + '</tr>'
      ;
 
-    return template;
+     return $(template);
 };
 
 
@@ -150,27 +150,29 @@ var clickHandler = function(targetElement) {
 //Set the current album
 //Call this function when the window loads.
 var setCurrentAlbum = function(album) {
-  // #1 Select all of the HTML elements required to display on the album page: title, artist, release info, image, and song list. We want to populate these elements with information. To do so, we assign the corresponding values of the album objects' properties to the HTML elements.
-    var albumTitle = document.getElementsByClassName('album-view-title')[0];
-    var albumArtist = document.getElementsByClassName('album-view-artist')[0];
-    var albumReleaseInfo = document.getElementsByClassName('album-view-release-info')[0];
-    var albumImage = document.getElementsByClassName('album-cover-art')[0];
-    var albumSongList = document.getElementsByClassName('album-view-song-list')[0];
+// Replace each instance of getElementsByClassName with a jQuery selector and use CSS-style syntax to select the elements. Add a $ to the start of each variable name because they now reference jQuery objects.
+       var $albumTitle = $('.album-view-title');
+       var $albumArtist = $('.album-view-artist');
+       var $albumReleaseInfo = $('.album-view-release-info');
+       var $albumImage = $('.album-cover-art');
+       var $albumSongList = $('.album-view-song-list');
 
 
-     // #2 Assign values to each part of the album (title, artist, year, images)
-     albumTitle.firstChild.nodeValue = album.title;
-     albumArtist.firstChild.nodeValue = album.artist;
-     albumReleaseInfo.firstChild.nodeValue = album.year + ' ' + album.label;
-     albumImage.setAttribute('src', album.albumArtUrl);
-
+     // #2 Album details. Refactor using jQuery
+     $albumTitle.text(album.title);
+     $albumArtist.text(album.artist);
+     $albumReleaseInfo.text(album.year + ' ' + album.label);
+     $albumImage.attr('src', album.albumArtUrl);
+     // attr() method changes the element attribute using the same arguments
 
      // #3 Clear contents of album song list container
-     albumSongList.innerHTML = '';
+     $albumSongList.empty();
 
      // #4 Build a list of songs from album JavaScript object
      for (var i = 0; i < album.songs.length; i++) {
-         albumSongList.innerHTML += createSongRow(i + 1, album.songs[i].title, album.songs[i].duration);
+        var $newRow = createSongRow(i + 1, album.songs[i].title, album.songs[i].duration);
+        $albumSongList.append($newRow);
+        //jQuery append() method changes the element attribute using the same arguments
      }
  };
 
