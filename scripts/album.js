@@ -136,8 +136,8 @@ var nextSong = function(){
   // Update the player bar information
   updatePlayerBarSong();
 
-  var $nextSongNumberCell = $('.song-item-number[data-song-number = " ' + currentlyPlayingSongNumber + '"]');
-  var $lastSongNumberCell = $('.song-item-number[data-song-number = " ' + lastSongNumber + ']');
+  var $nextSongNumberCell = $('.song-item-number[data-song-number="' + currentlyPlayingSongNumber + '"]');
+  var $lastSongNumberCell = $('.song-item-number[data-song-number="' + lastSongNumber + ']');
 
   //Update the HTML of the previous song's .song-item-number element with a number.
   $nextSongNumberCell.html(pauseButtonTemplate);
@@ -168,8 +168,8 @@ var previousSong = function(){
   // Update the player bar information
   updatePlayerBarSong();
 
-  var $previousSongNumberCell = $('.song-item-number[data-song-number = " ' + currentlyPlayingSongNumber + '"]');
-  var $lastSongNumberCell = $('.song-item-number[data-song-number = " ' + lastSongNumber + ']');
+  var $previousSongNumberCell = $('.song-item-number[data-song-number="' + currentlyPlayingSongNumber + '"]');
+  var $lastSongNumberCell = $('.song-item-number[data-song-number="' + lastSongNumber + ']');
 
   //Update the HTML of the previous song's .song-item-number element with a number.
   $previousSongNumberCell.html(pauseButtonTemplate);
