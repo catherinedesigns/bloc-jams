@@ -167,7 +167,7 @@ var previousSong = function(){
   currentSongIndex--;
 
   if(currentSongIndex < 0){
-    currentSongIndex = currentAlbum.song.length - 1;
+    currentSongIndex = currentAlbum.songs.length - 1;
   }
 
   // Save the last song number before changing it
