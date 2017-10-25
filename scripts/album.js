@@ -1,7 +1,9 @@
 // Checkpoint 31 homework
 var setSong = function(songNumber){
-  var currentlyPlayingSongNumber = parseInt(songNumber);
-  var currentSongFromAlbum = currentAlbum.songs[songNumber - 1];
+  // Not using var: re-assign the variable
+  // Using var: re-declare the variable
+  currentlyPlayingSongNumber = parseInt(songNumber);
+  currentSongFromAlbum = currentAlbum.songs[songNumber - 1];
 };
 // Checkpoint 31 homework
 var getSongNumberCell = function(number){
