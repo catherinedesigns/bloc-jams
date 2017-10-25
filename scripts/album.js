@@ -99,7 +99,26 @@ else if (!currentParent || !element) {
   }
 };
 
-
+// Checkpoint26 Hovsep
+var findParentByClassName = function(element, targetClass) {
+  if (element) {
+    var currentParent = element.parentElement;
+    //declare a variable named currentParent
+    if(!currentParent){
+      console.log("No parent found");
+    } // If currentParent doesn't exist, print "No parent found"
+    while (currentParent.className !== targetClass && currentParent.className !== null) {
+        currentParent = currentParent.parentElement;
+        //assign a new value to currentParent
+        //If current parent under a specific class has a value, but it's not the same as the targetClass
+        if(currentParent === null){
+          console.log("No parent found with that class name");
+        }//In the above situation, check if currentParent has a value. If it doesn't, print "No parent found with that class name"
+    }
+    return currentParent;
+    //When the above sitaution doesn't apply, meaning that 1) currentParent exists and 2) it has a value and 3) value equals targetClass, return currentParent
+  }
+};
 
 
 
