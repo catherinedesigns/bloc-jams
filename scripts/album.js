@@ -83,23 +83,8 @@ var createSongRow = function(songNumber, songName, songLength) {
 
 
 
-//Checkpoint26 homework ver2 - rewrite this function
-var findParentByClassName = function(element, targetClass){
-else if (!currentParent || !element) {
-    console.log("No parent found")
-  } else if (currentParent.className !== targetClass) {
-    console.log("No parent found with that class name")
-  }
-  if(element){
-    var currentParent = element.parentElement;
-    while (currentParent.className !== targetClass && currentParent.className !== null) {
-      currentParent = currentParent.parentElement;
-    }
-    return currentParent;
-  }
-};
 
-// Checkpoint26 Hovsep
+// Checkpoint26 Homework
 var findParentByClassName = function(element, targetClass) {
   if (element) {
     var currentParent = element.parentElement;
@@ -116,7 +101,7 @@ var findParentByClassName = function(element, targetClass) {
         }//In the above situation, check if currentParent has a value. If it doesn't, print "No parent found with that class name"
     }
     return currentParent;
-    //When the above sitaution doesn't apply, meaning that 1) currentParent exists and 2) it has a value and 3) value equals targetClass, return currentParent
+    //If an element is present, it will return [element.parentElement] unless the condition for the [while] loop is met. If the condition for the [while loop] is met, it will return the last thing that [currentParent] was reassigned to.
   }
 };
 
