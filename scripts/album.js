@@ -85,16 +85,17 @@ var createSongRow = function(songNumber, songName, songLength) {
 
 //Checkpoint26 homework ver2 - rewrite this function
 var findParentByClassName = function(element, targetClass){
+else if (!currentParent || !element) {
+    console.log("No parent found")
+  } else if (currentParent.className !== targetClass) {
+    console.log("No parent found with that class name")
+  }
   if(element){
     var currentParent = element.parentElement;
     while (currentParent.className !== targetClass && currentParent.className !== null) {
       currentParent = currentParent.parentElement;
     }
     return currentParent;
-  } else if (!currentParent || !element) {
-    console.log("No parent found")
-  } else if (currentParent.className !== targetClass) {
-    console.log("No parent found with that class name")
   }
 };
 
