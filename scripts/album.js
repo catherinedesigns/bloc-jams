@@ -1,10 +1,32 @@
 // Checkpoint 31 homework
 var setSong = function(songNumber){
+  if (currentSoundFile) {
+         currentSoundFile.stop(); // Stop multiple songs from playing concurrently. If click to play another song before current song is finished, stop current song.
+     }
   // Not using var: re-assign the variable
   // Using var: re-declare the variable
   currentlyPlayingSongNumber = parseInt(songNumber);
   currentSongFromAlbum = currentAlbum.songs[songNumber - 1];
+        // #1 assign a new [sound] object. Pass the audio file via the  [audioUrl] property on the [currentSongFromAlbum] object.
+     currentSoundFile = new buzz.sound(currentSongFromAlbum.audioUrl, {
+         // #2 pass in a settings object that has two properties, [formats] and [preload]
+         // [format] is an array of strings with acceptable audio formats. Only include the 'mp3' string because all the songs are in mp3 format.
+         // Setting preload to [true] tells Buzz to load the mp3s as soon as the page loads.
+         formats: [ 'mp3' ],
+         preload: true
+     });
+     setVolume(currentVolume);
 };
+
+var setVolume = function(volume) {
+    if (currentSoundFile) {
+        currentSoundFile.setVolume(volume);
+    }
+};
+
+
+
+
 // Checkpoint 31 homework
 var getSongNumberCell = function(number){
   return $('.song-item-number[data-song-number="' + number + '"]');
@@ -24,29 +46,60 @@ var createSongRow = function(songNumber, songName, songLength) {
      var $row = $(template);
 
 
-      // Checkpoint 31 refactor
-      var clickHandler = function() {
-         var songNumber = parseInt($(this).attr('data-song-number'));
+// Checkpoint 31 refactor replaced by Checkpoint 32 refactor -- see below
+// var clickHandler = function() {
+//    var songNumber = parseInt($(this).attr('data-song-number'));
+//
+//    if (currentlyPlayingSongNumber !== null) {
+//      // Revert to song number for currently playing song because user started playing new song.
+//      var currentlyPlayingCell = getSongNumberCell(currentlyPlayingSongNumber);
+//      currentlyPlayingCell.html(currentlyPlayingSongNumber);
+//    }
+//    if (currentlyPlayingSongNumber !== songNumber) {
+//      // Switch from Play -> Pause button to indicate new song is playing.
+//      $(this).html(pauseButtonTemplate);
+//      setSong(songNumber);
+//      updatePlayerBarSong();
+//    } else if (currentlyPlayingSongNumber === songNumber) {
+//      // Switch from Pause -> Play button to pause currently playing song.
+//      $(this).html(playButtonTemplate);
+//      $('.main-controls .play-pause').html(playerBarPlayButton);
+//      currentlyPlayingSongNumber = null;
+//      currentSongFromAlbum = null;
+//    }
+//  };
 
-         if (currentlyPlayingSongNumber !== null) {
-           // Revert to song number for currently playing song because user started playing new song.
-           var currentlyPlayingCell = getSongNumberCell(currentlyPlayingSongNumber);
-           currentlyPlayingCell.html(currentlyPlayingSongNumber);
-         }
-         if (currentlyPlayingSongNumber !== songNumber) {
-           // Switch from Play -> Pause button to indicate new song is playing.
-           $(this).html(pauseButtonTemplate);
-           setSong(songNumber);
-           updatePlayerBarSong();
-         } else if (currentlyPlayingSongNumber === songNumber) {
-           // Switch from Pause -> Play button to pause currently playing song.
-           $(this).html(playButtonTemplate);
-           $('.main-controls .play-pause').html(playerBarPlayButton);
-           currentlyPlayingSongNumber = null;
-           currentSongFromAlbum = null;
-         }
-       };
 
+ // Checkpoint 32 refactor clickHandler
+ var clickHandler = function() {
+    var songNumber = parseInt($(this).attr('data-song-number'));
+
+    if (currentlyPlayingSongNumber !== null) {
+      // Revert to song number for currently playing song because user started playing new song.
+      var currentlyPlayingCell = getSongNumberCell(currentlyPlayingSongNumber);
+      currentlyPlayingCell.html(currentlyPlayingSongNumber);
+    }
+
+    if (currentlyPlayingSongNumber !== songNumber) {
+      // Switch from Play -> Pause button to indicate new song is playing.
+      $(this).html(pauseButtonTemplate);
+      setSong(songNumber);
+      currentSoundFile.play(); //play currentSoundFile
+      updatePlayerBarSong();
+    } else if (currentlyPlayingSongNumber === songNumber) {
+
+          if (currentSoundFile.isPaused()) { // If currentSoundFile is paused
+            $(this).html(pauseButtonTemplate);     //revert the icon in the song row to pause
+            $('.main-controls .play-pause').html(playerBarPauseButton);  //revert the icon in the playerBar to pause
+            currentSoundFile.play(); //start playing the song again
+
+          } else { // If currentSoundFile is not paused
+            $(this).html(playButtonTemplate);//set the icon in the song row to play
+            $('.main-controls .play-pause').html(playerBarPlayButton); //set the icon in the playerBar to play
+            currentSoundFile.pause();//pause currentSoundFile
+          }
+      }
+  };
 
 
       //Checkpoint 31 refactor
@@ -143,6 +196,7 @@ var nextSong = function(){
 
   // Set a new current song
   currentlyPlayingSongNumber = currentSongIndex + 1;
+  currentSoundFile.play();
   currentSongFromAlbum = currentAlbum.songs[currentSongIndex];
 
   // Update the player bar information
@@ -175,6 +229,7 @@ var previousSong = function(){
 
   // Set a new current song
   currentlyPlayingSongNumber = currentSongIndex + 1;
+  currentSoundFile.play();
   currentSongFromAlbum = currentAlbum.songs[currentSongIndex];
 
   // Update the player bar information
@@ -206,6 +261,10 @@ var playerBarPauseButton = '<span class="ion-pause"></span>';
 var currentAlbum = null;
 var currentlyPlayingSongNumber = null;
 var currentSongFromAlbum = null;
+var currentSoundFile = null;
+var currentVolume = 80; // Set initial volume to 80
+
+
 
 var $previousButton = $('.main-controls .previous');
 var $nextButton = $('.main-controls .next');
