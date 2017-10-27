@@ -132,7 +132,35 @@ var createSongRow = function(songNumber, songName, songLength) {
 };
 
 
+// Checkpoint 32 homework
+// var name = function()
+// hold the $('.main-controls .play-pause') selector
+// $(document).ready()
+//   click()
+//   togglePlayFromPlayerBar() as an event handler
 
+
+// Checkpoint 32 homework
+var togglePlayFromPlayerBar = function(){
+    // if a song is paused && play button is clicked in the player bar
+  if (currentSoundFile.isPaused() && $('.main-controls .play-pause').html(playerBarPlayButton))
+    {
+    // change the song number cell to a pause button
+    songNumberCell.html(pauseButtonTemplate);
+    // change the html of the playerBar to a pause button
+    $('.main-controls .play-pause').html(playerBarPauseButton);
+    //play the song
+    currentSoundFile.play();
+  } else if (currentSoundFile && $('.main-controls .play-pause').html(playerBarPauseButton)) {
+    // if a song is playing (currentSoundFile exists) && pause button is clicked in the playerBar
+    // change the songNumberCell to a playButtonTemplate
+    songNumberCell.html(playButtonTemplate);
+    // change the html of the playerBar to a play button
+    $('.main-controls .play-pause').html(playerBarPlayButton);
+    // pause the song
+    currentSoundFile.pause();
+  }
+};
 
 
 //Set the current album
