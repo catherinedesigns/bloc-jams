@@ -248,24 +248,11 @@ var previousSong = function(){
 
 
 
-// Checkpoint 32 homework
-
-//Create a variable to hold the $('.main-controls .play-pause') selector and add a click() event to it in the $(document).ready() block with togglePlayFromPlayerBar() as an event handler.
-
-// Create a variable to hold the $('.main-controls .play-pause') selector
-var $playPause = $('.main-controls .play-pause');
-// in the $(document).ready() block
-$(document).ready(function(){
-  // add a click() event to this variable
-  $playPause.click();
-  // use togglePlayFromPlayerBar() as an event handler
-  togglePlayFromPlayerBar();
-});
-
-
 
 // Checkpoint 32 homework
-var togglePlayFromPlayerBar = function(){
+var togglePlayFromPlayerBar = function() {
+   var $currentlyPlayingCell = getSongNumberCell(currentlyPlayingSongNumber);
+   console.log($currentlyPlayingCell); // for debugging purposes only
     // if a song is paused && play button is clicked in the player bar
   if (currentSoundFile.isPaused() && $('.main-controls .play-pause').html(playerBarPlayButton)) {
     // change the song number cell to a pause button
@@ -274,7 +261,7 @@ var togglePlayFromPlayerBar = function(){
     $('.main-controls .play-pause').html(playerBarPauseButton);
     //play the song
     currentSoundFile.play();
-  } else if (currentSoundFile && $('.main-controls .play-pause').html(playerBarPauseButton)) {
+  } else {
     // if a song is playing (currentSoundFile exists) && pause button is clicked in the playerBar
     // change the songNumberCell to a playButtonTemplate
     songNumberCell.html(playButtonTemplate);
@@ -284,6 +271,7 @@ var togglePlayFromPlayerBar = function(){
     currentSoundFile.pause();
   }
 };
+
 
 
 
@@ -305,8 +293,19 @@ var currentVolume = 80; // Set initial volume to 80
 var $previousButton = $('.main-controls .previous');
 var $nextButton = $('.main-controls .next');
 
+
+// Checkpoint 32 homework
+// Create a variable to hold the $('.main-controls .play-pause') selector and add a click() event to it in the $(document).ready() block with togglePlayFromPlayerBar() as an event handler.
+
+// Create a variable to hold the $('.main-controls .play-pause') selector
+var $playPause = $('.main-controls .play-pause');
+// in the $(document).ready() block
+
 $(document).ready(function() {
       setCurrentAlbum(albumPicasso);
       $previousButton.click(previousSong);
       $nextButton.click(nextSong);
+      // Checkpoint 32 homework
+      // add a click() event to this variable, use togglePlayFromPlayerBar() as an event handler
+      $playPause.click(togglePlayFromPlayerBar);
   });
