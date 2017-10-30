@@ -102,6 +102,9 @@ var createSongRow = function(songNumber, songName, songLength) {
   };
 
 
+
+
+
       //Checkpoint 31 refactor
       var onHover = function(event) {
            var songNumberCell = $(this).find('.song-item-number');
@@ -251,6 +254,21 @@ var previousSong = function(){
 
 
 
+// Checkpoint 32 homework Hovsep
+var togglePlayFromPlayerBar = function() {
+  var $currentlyPlayingCell = getSongNumberCell(currentlyPlayingSongNumber);
+  if (currentSoundFile.isPaused()){ //If a song is paused
+    $currentlyPlayingCell.html(pauseButtonTemplate); // Change the songNumberCell to a pause button
+    $(this).html(playerBarPauseButton); // Change the html of the playerBar to a pause button
+    currentSoundFile.play(); // and play the song
+  } else { // If a song is playing
+    $currentlyPlayingCell.html(playButtonTemplate); // Change the songNumberCell to a play button
+    $(this).html(playerBarPlayButton); // Change the html of the playerBar to a play button
+    currentSoundFile.pause(); // and pause the song
+  }
+};
+
+
  // Album button templates
 var playButtonTemplate = '<a class="album-song-button"><span class="ion-play"></span></a>';
 var pauseButtonTemplate = '<a class="album-song-button"><span class="ion-pause"></span></a>';
@@ -269,8 +287,19 @@ var currentVolume = 80; // Set initial volume to 80
 var $previousButton = $('.main-controls .previous');
 var $nextButton = $('.main-controls .next');
 
+
+// Checkpoint 32 homework
+// Create a variable to hold the $('.main-controls .play-pause') selector and add a click() event to it in the $(document).ready() block with togglePlayFromPlayerBar() as an event handler.
+
+// Create a variable to hold the $('.main-controls .play-pause') selector
+var $playPause = $('.main-controls .play-pause');
+// in the $(document).ready() block
+
 $(document).ready(function() {
       setCurrentAlbum(albumPicasso);
       $previousButton.click(previousSong);
       $nextButton.click(nextSong);
+      // Checkpoint 32 homework
+      // add a click() event to this variable, use togglePlayFromPlayerBar() as an event handler
+      $playPause.click(togglePlayFromPlayerBar);
   });
