@@ -102,6 +102,9 @@ var createSongRow = function(songNumber, songName, songLength) {
   };
 
 
+
+
+
       //Checkpoint 31 refactor
       var onHover = function(event) {
            var songNumberCell = $(this).find('.song-item-number');
@@ -249,30 +252,21 @@ var previousSong = function(){
 
 
 
-// Checkpoint 32 homework
+
+
+// Checkpoint 32 homework Hovsep
 var togglePlayFromPlayerBar = function() {
-   var $currentlyPlayingCell = getSongNumberCell(currentlyPlayingSongNumber);
-   console.log($currentlyPlayingCell); // for debugging purposes only
-    // if a song is paused && play button is clicked in the player bar
-  if (currentSoundFile.isPaused() && $('.main-controls .play-pause').html(playerBarPlayButton)) {
-    // change the song number cell to a pause button
-    songNumberCell.html(pauseButtonTemplate);
-    // change the html of the playerBar to a pause button
-    $('.main-controls .play-pause').html(playerBarPauseButton);
-    //play the song
-    currentSoundFile.play();
-  } else {
-    // if a song is playing (currentSoundFile exists) && pause button is clicked in the playerBar
-    // change the songNumberCell to a playButtonTemplate
-    songNumberCell.html(playButtonTemplate);
-    // change the html of the playerBar to a play button
-    $('.main-controls .play-pause').html(playerBarPlayButton);
-    // pause the song
-    currentSoundFile.pause();
+  var $currentlyPlayingCell = getSongNumberCell(currentlyPlayingSongNumber);
+  if (currentSoundFile.isPaused()){ //If a song is paused
+    $currentlyPlayingCell.html(pauseButtonTemplate); // Change the songNumberCell to a pause button
+    $(this).html(playerBarPauseButton); // Change the html of the playerBar to a pause button
+    currentSoundFile.play(); // and play the song
+  } else { // If a song is playing
+    $currentlyPlayingCell.html(playButtonTemplate); // Change the songNumberCell to a play button
+    $(this).html(playerBarPlayButton); // Change the html of the playerBar to a play button
+    currentSoundFile.pause(); // and pause the song
   }
 };
-
-
 
 
  // Album button templates
