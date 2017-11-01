@@ -5,13 +5,14 @@ var albumPicasso = {
     year: '1881',
     albumArtUrl: 'images/album_covers/01.png',
     songs: [
-        { title: 'Blue', duration: '4:26', audioUrl: 'music/blue' },
-        { title: 'Green', duration: '3:14', audioUrl: 'music/green' },
-        { title: 'Red', duration: '5:01', audioUrl: 'music/red' },
-        { title: 'Pink', duration: '3:21', audioUrl: 'music/pink' },
-        { title: 'Magenta', duration: '2:15', audioUrl: 'music/magenta' }
+       { title: 'Blue', duration: 161.71, audioUrl: 'music/blue' },
+       { title: 'Green', duration: 103.96, audioUrl: 'music/green' },
+       { title: 'Red', duration: 268.45, audioUrl: 'music/red' },
+       { title: 'Pink', duration: 153.14, audioUrl: 'music/pink' },
+       { title: 'Magenta', duration: 374.22, audioUrl: 'music/magenta' }
     ]
 };
+
 
 var albumMarconi = {
     title: 'The Telephone',
