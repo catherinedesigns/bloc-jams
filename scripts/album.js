@@ -442,6 +442,49 @@ var $nextButton = $('.main-controls .next');
 var $playPause = $('.main-controls .play-pause');
 // in the $(document).ready() block
 
+
+// Checkpoint 33 homework
+//#1
+var setCurrentTimeInPlayerBar = function(currentTime) {
+  // set the text of the element with the [.current-time] class to the current time in the song
+  $('.current-time').text(currentTime);
+};
+//Add the method to updateSeekBarWhileSongPlays() so the current time updates with song playback.
+updateSeekBarWhileSongPlays(setCurrentTimeInPlayerBar);
+
+//#2
+var setTotalTimeInPlayerBar = function(totalTime){
+  $('.total-time').text(totalTime);
+};
+//Add the method to updatePlayerBarSong() so the total time is set when a song first plays.
+updatePlayerBarSong(setTotalTimeInPlayerBar);
+
+//#3
+var filterTimeCode = function(timeInSeconds){
+  // Use the parseFloat() method to get the seconds in numbers format
+  parseFloat(timeInSeconds);
+  // Store variables for whole seconds and whole minutes. Use Math.floor() method
+  var seconds = "0" + math.floor(timeInSeconds % 60);
+  var minutes = math.floor(timeInSeconds / 60);
+  // return time in XX:XX format
+  return minutes + " : " + seconds;
+};
+
+//#4 Wrap the arguments passed to setCurrentTimeInPlayerBar() and setTotalTimeInPlayerBar() in a filterTimeCode() call so the time output below the seek bar is formatted.
+setCurrentTimeInPlayerBar(filterTimeCode(this.getTime()));
+
+setTotalTimeInPlayerBar(filterTimeCode(this.getTime()));
+
+//#5 Wrap the songLength variable in createSongRow() in a filterTimeCode() call so the time lengths are formatted.
+setTotalTimeInPlayerBar(filterTimeCode(currentSongFromAlbum.duration));
+'<td class="song-item-duration">' + filterTimeCode(songLength) + '<td>';
+
+
+
+
+
+
+
 $(document).ready(function() {
       setCurrentAlbum(albumPicasso);
       setupSeekBars();
