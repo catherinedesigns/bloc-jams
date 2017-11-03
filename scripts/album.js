@@ -44,11 +44,12 @@ var getSongNumberCell = function(number){
 //Generate the song row content
 var createSongRow = function(songNumber, songName, songLength) {
     var template =
-       '<tr class="album-view-song-item">'
-     + '  <td class="song-item-number" data-song-number="' + songNumber + '">' + songNumber + '</td>'
-     + '  <td class="song-item-title">' + songName + '</td>'
-     + '  <td class="song-item-duration">' + songLength + '</td>'
-     + '</tr>'
+      '  <tr class="album-view-song-item">'
+      '  <td class="song-item-number" data-song-number="' + songNumber + '">' + songNumber + '</td>'
+      '  <td class="song-item-title">' + songName + '</td>'
+      '  <td class="song-item-duration">' + songLength + '</td>'
+      '  <td class="song-item-duration">' + filterTimeCode(songLength) + '<td>';
+      '  </tr>'
      ;
 
      var $row = $(template);
@@ -88,18 +89,7 @@ var createSongRow = function(songNumber, songName, songLength) {
       currentlyPlayingCell.html(currentlyPlayingSongNumber);
 
       // Trigger this method whenever a song plays
-        var updateSeekBarWhileSongPlays = function() {
-             if (currentSoundFile) {
-                 // #10 bind() the [timeupdate] event to [currentSoundFile]. [timeupdate] is a custom Buzz event that fires repeatedly while time elapses during song playback.
-                 currentSoundFile.bind('timeupdate', function(event) {
-                     // #11 Calculate the seekBarFillRatio. Use [getTime()] method to get the current time of the song. Use [getDuration()] method to get the total length of the song. Both values return time in seconds.
-                     var seekBarFillRatio = this.getTime() / this.getDuration();
-                     var $seekBar = $('.seek-control .seek-bar');
-
-                     updateSeekPercentage($seekBar, seekBarFillRatio);
-                 });
-             }
-         };
+      updateSeekBarWhileSongPlays();
     }
 
     if (currentlyPlayingSongNumber !== songNumber) {
@@ -266,10 +256,10 @@ var setupSeekBars = function() {
                 var seekBarFillRatio = offsetX / barWidth;
 
                 // Checkpoint 33 Checks the class of the seek bar's parent to determine whether the current seek bar is changing the volume or seeking to a song position
-                if ($(this).parent().attr('class') == 'seek-control') {    // If it's the playback seek bar
-                  seek(seekBarFillRatio * currentSoundFile.getDuration()); // seek to the position of the song determined by [seekBarFillRatio]
+                if ($seekBar.parent().attr('class') == 'seek-control') {  // If it's the playback seek bar
+                 seek(seekBarFillRatio * currentSoundFile.getDuration()); // seek to the position of the song determined by [seekBarFillRatio]
                 } else {                                                  // Otherwise
-                  setVolume(seekBarFillRatio * 100);                      // set the volume based on [seekBarFillRatio]
+                 setVolume(seekBarFillRatio);                             // set the volume based on [seekBarFillRatio]
                 }
 
                 updateSeekPercentage($seekBar, seekBarFillRatio);
@@ -323,18 +313,8 @@ var nextSong = function(){
   updatePlayerBarSong();
 
   // Trigger this method whenever a song plays
-  var updateSeekBarWhileSongPlays = function() {
-       if (currentSoundFile) {
-           // #10 bind() the [timeupdate] event to [currentSoundFile]. [timeupdate] is a custom Buzz event that fires repeatedly while time elapses during song playback.
-           currentSoundFile.bind('timeupdate', function(event) {
-               // #11 Calculate the seekBarFillRatio. Use [getTime()] method to get the current time of the song. Use [getDuration()] method to get the total length of the song. Both values return time in seconds.
-               var seekBarFillRatio = this.getTime() / this.getDuration();
-               var $seekBar = $('.seek-control .seek-bar');
+  updateSeekBarWhileSongPlays();
 
-               updateSeekPercentage($seekBar, seekBarFillRatio);
-           });
-       }
-   };
 
   var $nextSongNumberCell = getSongNumberCell(currentlyPlayingSongNumber);
   var $lastSongNumberCell = getSongNumberCell(lastSongNumber);
@@ -368,18 +348,8 @@ var previousSong = function(){
   currentSoundFile.play();
 
   // Trigger this method whenever a song plays
-    var updateSeekBarWhileSongPlays = function() {
-         if (currentSoundFile) {
-             // #10 bind() the [timeupdate] event to [currentSoundFile]. [timeupdate] is a custom Buzz event that fires repeatedly while time elapses during song playback.
-             currentSoundFile.bind('timeupdate', function(event) {
-                 // #11 Calculate the seekBarFillRatio. Use [getTime()] method to get the current time of the song. Use [getDuration()] method to get the total length of the song. Both values return time in seconds.
-                 var seekBarFillRatio = this.getTime() / this.getDuration();
-                 var $seekBar = $('.seek-control .seek-bar');
+  updateSeekBarWhileSongPlays();
 
-                 updateSeekPercentage($seekBar, seekBarFillRatio);
-             });
-         }
-     };
 
   // Update the player bar information
   updatePlayerBarSong();
@@ -467,17 +437,17 @@ var filterTimeCode = function(timeInSeconds){
   var seconds = "0" + math.floor(timeInSeconds % 60);
   var minutes = math.floor(timeInSeconds / 60);
   // return time in XX:XX format
-  return minutes + " : " + seconds;
+  return minutes + ":" + seconds.slice(-2); // Negative means a position starting from the end of the set. Index of first number is 0.
 };
 
-//#4 Wrap the arguments passed to setCurrentTimeInPlayerBar() and setTotalTimeInPlayerBar() in a filterTimeCode() call so the time output below the seek bar is formatted.
-setCurrentTimeInPlayerBar(filterTimeCode(this.getTime()));
 
+
+//#4 Wrap the arguments passed to [setCurrentTimeInPlayerBar()] and [setTotalTimeInPlayerBar()] in a filterTimeCode() call so the time output below the seek bar is formatted.
+setCurrentTimeInPlayerBar(filterTimeCode(this.getTime()));
 setTotalTimeInPlayerBar(filterTimeCode(this.getTime()));
 
-//#5 Wrap the songLength variable in createSongRow() in a filterTimeCode() call so the time lengths are formatted.
+//#5 Wrap the [songLength] variable in createSongRow() in a filterTimeCode() call so the time lengths are formatted.
 setTotalTimeInPlayerBar(filterTimeCode(currentSongFromAlbum.duration));
-'<td class="song-item-duration">' + filterTimeCode(songLength) + '<td>';
 
 
 
