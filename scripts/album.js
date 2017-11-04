@@ -53,6 +53,7 @@ var createSongRow = function(songNumber, songName, songLength) {
      ;
 
      var $row = $(template);
+   }
 
 
 // Checkpoint 31 refactor replaced by Checkpoint 32 refactor -- see below
