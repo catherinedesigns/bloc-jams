@@ -44,16 +44,15 @@ var getSongNumberCell = function(number){
 //Generate the song row content
 var createSongRow = function(songNumber, songName, songLength) {
     var template =
-      '  <tr class="album-view-song-item">'
-      '  <td class="song-item-number" data-song-number="' + songNumber + '">' + songNumber + '</td>'
-      '  <td class="song-item-title">' + songName + '</td>'
-      '  <td class="song-item-duration">' + songLength + '</td>'
-      '  <td class="song-item-duration">' + filterTimeCode(songLength) + '<td>';
-      '  </tr>'
+       '<tr class="album-view-song-item">'
+     + '  <td class="song-item-number" data-song-number="' + songNumber + '">' + songNumber + '</td>'
+     + '  <td class="song-item-title">' + songName + '</td>'
+     + '  <td class="song-item-duration">' + songLength + '</td>'
+     + '  <td class="song-item-duration">' + filterTimeCode(songLength) + '</td>'
+     + '</tr>'
      ;
 
      var $row = $(template);
-
 
 
 // Checkpoint 31 refactor replaced by Checkpoint 32 refactor -- see below
@@ -80,45 +79,45 @@ var createSongRow = function(songNumber, songName, songLength) {
 //  };
 
 
-   // Checkpoint 32 refactor clickHandler
-   var clickHandler = function() {
-      var songNumber = parseInt($(this).attr('data-song-number'));
+ // Checkpoint 32 refactor clickHandler
+ var clickHandler = function() {
+    var songNumber = parseInt($(this).attr('data-song-number'));
 
-      if (currentlyPlayingSongNumber !== null) {
-        // Revert to song number for currently playing song because user started playing new song.
-        var currentlyPlayingCell = getSongNumberCell(currentlyPlayingSongNumber);
-        currentlyPlayingCell.html(currentlyPlayingSongNumber);
+    if (currentlyPlayingSongNumber !== null) {
+      // Revert to song number for currently playing song because user started playing new song.
+      var currentlyPlayingCell = getSongNumberCell(currentlyPlayingSongNumber);
+      currentlyPlayingCell.html(currentlyPlayingSongNumber);
 
-        // Trigger this method whenever a song plays
-        updateSeekBarWhileSongPlays();
+      // Trigger this method whenever a song plays
+      updateSeekBarWhileSongPlays();
+    }
+
+    if (currentlyPlayingSongNumber !== songNumber) {
+      // Switch from Play -> Pause button to indicate new song is playing.
+      $(this).html(pauseButtonTemplate);
+      setSong(songNumber);
+      currentSoundFile.play(); //play currentSoundFile
+      updatePlayerBarSong();
+
+      var $volumeFill = $('.volume .fill');
+      var $volumeThumb = $('.volume .thumb');
+      $volumeFill.width(currentVolume + '%');
+      $volumeThumb.css({left: currentVolume + '%'});
+
+    } else if (currentlyPlayingSongNumber === songNumber) {
+
+          if (currentSoundFile.isPaused()) { // If currentSoundFile is paused
+            $(this).html(pauseButtonTemplate);     //revert the icon in the song row to pause
+            $('.main-controls .play-pause').html(playerBarPauseButton);  //revert the icon in the playerBar to pause
+            currentSoundFile.play(); //start playing the song again
+
+          } else { // If currentSoundFile is not paused
+            $(this).html(playButtonTemplate);//set the icon in the song row to play
+            $('.main-controls .play-pause').html(playerBarPlayButton); //set the icon in the playerBar to play
+            currentSoundFile.pause();//pause currentSoundFile
+          }
       }
-
-      if (currentlyPlayingSongNumber !== songNumber) {
-        // Switch from Play -> Pause button to indicate new song is playing.
-        $(this).html(pauseButtonTemplate);
-        setSong(songNumber);
-        currentSoundFile.play(); //play currentSoundFile
-        updatePlayerBarSong();
-
-        var $volumeFill = $('.volume .fill');
-        var $volumeThumb = $('.volume .thumb');
-        $volumeFill.width(currentVolume + '%');
-        $volumeThumb.css({left: currentVolume + '%'});
-
-      } else if (currentlyPlayingSongNumber === songNumber) {
-
-            if (currentSoundFile.isPaused()) { // If currentSoundFile is paused
-              $(this).html(pauseButtonTemplate);     //revert the icon in the song row to pause
-              $('.main-controls .play-pause').html(playerBarPauseButton);  //revert the icon in the playerBar to pause
-              currentSoundFile.play(); //start playing the song again
-
-            } else { // If currentSoundFile is not paused
-              $(this).html(playButtonTemplate);//set the icon in the song row to play
-              $('.main-controls .play-pause').html(playerBarPlayButton); //set the icon in the playerBar to play
-              currentSoundFile.pause();//pause currentSoundFile
-            }
-        }
-      };
+  };
 
 
 
@@ -257,10 +256,10 @@ var setupSeekBars = function() {
                 var seekBarFillRatio = offsetX / barWidth;
 
                 // Checkpoint 33 Checks the class of the seek bar's parent to determine whether the current seek bar is changing the volume or seeking to a song position
-                if ($seekBar.parent().attr('class') == 'seek-control') {  // If it's the playback seek bar
-                 seek(seekBarFillRatio * currentSoundFile.getDuration()); // seek to the position of the song determined by [seekBarFillRatio]
+                if ($(this).parent().attr('class') == 'seek-control') {    // If it's the playback seek bar
+                  seek(seekBarFillRatio * currentSoundFile.getDuration()); // seek to the position of the song determined by [seekBarFillRatio]
                 } else {                                                  // Otherwise
-                 setVolume(seekBarFillRatio);                             // set the volume based on [seekBarFillRatio]
+                  setVolume(seekBarFillRatio * 100);                      // set the volume based on [seekBarFillRatio]
                 }
 
                 updateSeekPercentage($seekBar, seekBarFillRatio);
@@ -316,7 +315,6 @@ var nextSong = function(){
   // Trigger this method whenever a song plays
   updateSeekBarWhileSongPlays();
 
-
   var $nextSongNumberCell = getSongNumberCell(currentlyPlayingSongNumber);
   var $lastSongNumberCell = getSongNumberCell(lastSongNumber);
 
@@ -350,7 +348,6 @@ var previousSong = function(){
 
   // Trigger this method whenever a song plays
   updateSeekBarWhileSongPlays();
-
 
   // Update the player bar information
   updatePlayerBarSong();
@@ -414,31 +411,32 @@ var $playPause = $('.main-controls .play-pause');
 // in the $(document).ready() block
 
 
-// Checkpoint 33 homework
+
+// ============ Checkpoint 33 homework ============
 //#1
 var setCurrentTimeInPlayerBar = function(currentTime) {
-  // set the text of the element with the [.current-time] class to the current time in the song
-  $('.current-time').text(currentTime);
+ // set the text of the element with the [.current-time] class to the current time in the song
+ $('.current-time').text(currentTime);
 };
 //Add the method to updateSeekBarWhileSongPlays() so the current time updates with song playback.
 updateSeekBarWhileSongPlays(setCurrentTimeInPlayerBar);
 
 //#2
 var setTotalTimeInPlayerBar = function(totalTime){
-  $('.total-time').text(totalTime);
+ $('.total-time').text(totalTime);
 };
 //Add the method to updatePlayerBarSong() so the total time is set when a song first plays.
 updatePlayerBarSong(setTotalTimeInPlayerBar);
 
 //#3
 var filterTimeCode = function(timeInSeconds){
-  // Use the parseFloat() method to get the seconds in numbers format
-  parseFloat(timeInSeconds);
-  // Store variables for whole seconds and whole minutes. Use Math.floor() method
-  var seconds = "0" + math.floor(timeInSeconds % 60);
-  var minutes = math.floor(timeInSeconds / 60);
-  // return time in XX:XX format
-  return minutes + ":" + seconds.slice(-2); // Negative means a position starting from the end of the set. Index of first number is 0.
+ // Use the parseFloat() method to get the seconds in numbers format
+ parseFloat(timeInSeconds);
+ // Store variables for whole seconds and whole minutes. Use Math.floor() method
+ var seconds = "0" + math.floor(timeInSeconds % 60);
+ var minutes = math.floor(timeInSeconds / 60);
+ // return time in XX:XX format
+ return minutes + ":" + seconds.slice(-2); // Negative means a position starting from the end of the set. Index of first number is 0.
 };
 
 
@@ -448,8 +446,6 @@ setTotalTimeInPlayerBar(filterTimeCode(this.getTime()));
 
 //#5 Wrap the [songLength] variable in createSongRow() in a filterTimeCode() call so the time lengths are formatted.
 setTotalTimeInPlayerBar(filterTimeCode(currentSongFromAlbum.duration));
-
-
 
 
 
