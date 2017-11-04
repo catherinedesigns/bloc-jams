@@ -53,7 +53,7 @@ var createSongRow = function(songNumber, songName, songLength) {
      ;
 
      var $row = $(template);
-   }
+
 
 
 // Checkpoint 31 refactor replaced by Checkpoint 32 refactor -- see below
@@ -80,45 +80,45 @@ var createSongRow = function(songNumber, songName, songLength) {
 //  };
 
 
- // Checkpoint 32 refactor clickHandler
- var clickHandler = function() {
-    var songNumber = parseInt($(this).attr('data-song-number'));
+   // Checkpoint 32 refactor clickHandler
+   var clickHandler = function() {
+      var songNumber = parseInt($(this).attr('data-song-number'));
 
-    if (currentlyPlayingSongNumber !== null) {
-      // Revert to song number for currently playing song because user started playing new song.
-      var currentlyPlayingCell = getSongNumberCell(currentlyPlayingSongNumber);
-      currentlyPlayingCell.html(currentlyPlayingSongNumber);
+      if (currentlyPlayingSongNumber !== null) {
+        // Revert to song number for currently playing song because user started playing new song.
+        var currentlyPlayingCell = getSongNumberCell(currentlyPlayingSongNumber);
+        currentlyPlayingCell.html(currentlyPlayingSongNumber);
 
-      // Trigger this method whenever a song plays
-      updateSeekBarWhileSongPlays();
-    }
-
-    if (currentlyPlayingSongNumber !== songNumber) {
-      // Switch from Play -> Pause button to indicate new song is playing.
-      $(this).html(pauseButtonTemplate);
-      setSong(songNumber);
-      currentSoundFile.play(); //play currentSoundFile
-      updatePlayerBarSong();
-
-      var $volumeFill = $('.volume .fill');
-      var $volumeThumb = $('.volume .thumb');
-      $volumeFill.width(currentVolume + '%');
-      $volumeThumb.css({left: currentVolume + '%'});
-
-    } else if (currentlyPlayingSongNumber === songNumber) {
-
-          if (currentSoundFile.isPaused()) { // If currentSoundFile is paused
-            $(this).html(pauseButtonTemplate);     //revert the icon in the song row to pause
-            $('.main-controls .play-pause').html(playerBarPauseButton);  //revert the icon in the playerBar to pause
-            currentSoundFile.play(); //start playing the song again
-
-          } else { // If currentSoundFile is not paused
-            $(this).html(playButtonTemplate);//set the icon in the song row to play
-            $('.main-controls .play-pause').html(playerBarPlayButton); //set the icon in the playerBar to play
-            currentSoundFile.pause();//pause currentSoundFile
-          }
+        // Trigger this method whenever a song plays
+        updateSeekBarWhileSongPlays();
       }
-  };
+
+      if (currentlyPlayingSongNumber !== songNumber) {
+        // Switch from Play -> Pause button to indicate new song is playing.
+        $(this).html(pauseButtonTemplate);
+        setSong(songNumber);
+        currentSoundFile.play(); //play currentSoundFile
+        updatePlayerBarSong();
+
+        var $volumeFill = $('.volume .fill');
+        var $volumeThumb = $('.volume .thumb');
+        $volumeFill.width(currentVolume + '%');
+        $volumeThumb.css({left: currentVolume + '%'});
+
+      } else if (currentlyPlayingSongNumber === songNumber) {
+
+            if (currentSoundFile.isPaused()) { // If currentSoundFile is paused
+              $(this).html(pauseButtonTemplate);     //revert the icon in the song row to pause
+              $('.main-controls .play-pause').html(playerBarPauseButton);  //revert the icon in the playerBar to pause
+              currentSoundFile.play(); //start playing the song again
+
+            } else { // If currentSoundFile is not paused
+              $(this).html(playButtonTemplate);//set the icon in the song row to play
+              $('.main-controls .play-pause').html(playerBarPlayButton); //set the icon in the playerBar to play
+              currentSoundFile.pause();//pause currentSoundFile
+            }
+        }
+      };
 
 
 
@@ -440,7 +440,6 @@ var filterTimeCode = function(timeInSeconds){
   // return time in XX:XX format
   return minutes + ":" + seconds.slice(-2); // Negative means a position starting from the end of the set. Index of first number is 0.
 };
-
 
 
 //#4 Wrap the arguments passed to [setCurrentTimeInPlayerBar()] and [setTotalTimeInPlayerBar()] in a filterTimeCode() call so the time output below the seek bar is formatted.
