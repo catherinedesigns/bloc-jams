@@ -47,7 +47,7 @@ var createSongRow = function(songNumber, songName, songLength) {
        '<tr class="album-view-song-item">'
      + '  <td class="song-item-number" data-song-number="' + songNumber + '">' + songNumber + '</td>'
      + '  <td class="song-item-title">' + songName + '</td>'
-     + '  <td class="song-item-duration">' + songLength + '</td>'
+    //  + '  <td class="song-item-duration">' + songLength + '</td>'
      + '  <td class="song-item-duration">' + filterTimeCode(songLength) + '</td>'
      + '</tr>'
      ;
@@ -97,6 +97,7 @@ var createSongRow = function(songNumber, songName, songLength) {
       $(this).html(pauseButtonTemplate);
       setSong(songNumber);
       currentSoundFile.play(); //play currentSoundFile
+      updateSeekBarWhileSongPlays(); // place this function before [updatePlayerBarSong()]
       updatePlayerBarSong();
 
       var $volumeFill = $('.volume .fill');
@@ -110,6 +111,9 @@ var createSongRow = function(songNumber, songName, songLength) {
             $(this).html(pauseButtonTemplate);     //revert the icon in the song row to pause
             $('.main-controls .play-pause').html(playerBarPauseButton);  //revert the icon in the playerBar to pause
             currentSoundFile.play(); //start playing the song again
+            updateSeekBarWhileSongPlays();
+            updatePlayerBarSong();
+
 
           } else { // If currentSoundFile is not paused
             $(this).html(playButtonTemplate);//set the icon in the song row to play
@@ -200,6 +204,7 @@ var updateSeekBarWhileSongPlays = function() {
              var $seekBar = $('.seek-control .seek-bar');
 
              updateSeekPercentage($seekBar, seekBarFillRatio);
+             setCurrentTimeInPlayerBar(filterTimeCode(this.getTime()));
          });
      }
  };
@@ -287,6 +292,7 @@ var setupSeekBars = function() {
     $('.currently-playing .artist-name').text(currentAlbum.artist);
     $('.currently-playing .artist-song-mobile').text(currentSongFromAlbum.title + " - " + currentAlbum.artist);
     $('.main-controls .play-pause').html(playerBarPauseButton);
+    setTotalTimeInPlayerBar(filterTimeCode(currentSongFromAlbum.duration)); // HERE
 };
 
 // Checkpoint 31 nextSong
@@ -308,12 +314,10 @@ var nextSong = function(){
   // currentSongFromAlbum = currentAlbum.songs[currentSongIndex];
   setSong(currentSongIndex + 1);
   currentSoundFile.play();
+  updateSeekBarWhileSongPlays(); // Trigger this method whenever a song plays
 
   // Update the player bar information
   updatePlayerBarSong();
-
-  // Trigger this method whenever a song plays
-  updateSeekBarWhileSongPlays();
 
   var $nextSongNumberCell = getSongNumberCell(currentlyPlayingSongNumber);
   var $lastSongNumberCell = getSongNumberCell(lastSongNumber);
@@ -398,7 +402,6 @@ var currentSoundFile = null;
 var currentVolume = 80; // Set initial volume to 80
 
 
-
 var $previousButton = $('.main-controls .previous');
 var $nextButton = $('.main-controls .next');
 
@@ -425,28 +428,18 @@ updateSeekBarWhileSongPlays(setCurrentTimeInPlayerBar);
 var setTotalTimeInPlayerBar = function(totalTime){
  $('.total-time').text(totalTime);
 };
-//Add the method to updatePlayerBarSong() so the total time is set when a song first plays.
-updatePlayerBarSong(setTotalTimeInPlayerBar);
+
 
 //#3
 var filterTimeCode = function(timeInSeconds){
  // Use the parseFloat() method to get the seconds in numbers format
  parseFloat(timeInSeconds);
  // Store variables for whole seconds and whole minutes. Use Math.floor() method
- var seconds = "0" + math.floor(timeInSeconds % 60);
- var minutes = math.floor(timeInSeconds / 60);
+ var seconds = "0" + Math.floor(timeInSeconds % 60);
+ var minutes = Math.floor(timeInSeconds / 60);
  // return time in XX:XX format
  return minutes + ":" + seconds.slice(-2); // Negative means a position starting from the end of the set. Index of first number is 0.
 };
-
-
-//#4 Wrap the arguments passed to [setCurrentTimeInPlayerBar()] and [setTotalTimeInPlayerBar()] in a filterTimeCode() call so the time output below the seek bar is formatted.
-setCurrentTimeInPlayerBar(filterTimeCode(this.getTime()));
-setTotalTimeInPlayerBar(filterTimeCode(this.getTime()));
-
-//#5 Wrap the [songLength] variable in createSongRow() in a filterTimeCode() call so the time lengths are formatted.
-setTotalTimeInPlayerBar(filterTimeCode(currentSongFromAlbum.duration));
-
 
 
 
